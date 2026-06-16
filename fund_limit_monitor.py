@@ -22,7 +22,8 @@ from zoneinfo import ZoneInfo
 F10_URL = "https://fundf10.eastmoney.com/jjfl_{code}.html"
 PINGZHONG_URL = "https://fund.eastmoney.com/pingzhongdata/{code}.js"
 FUND_CODE_SEARCH_URL = "https://fund.eastmoney.com/js/fundcode_search.js"
-DEFAULT_TIMEOUT = 15
+DEFAULT_TIMEOUT = 20
+DEFAULT_FETCH_ATTEMPTS = 3
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36"
@@ -67,15 +68,29 @@ class MonitorError(RuntimeError):
     pass
 
 
-def fetch_text(url: str, timeout: int = DEFAULT_TIMEOUT) -> str:
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        body = response.read()
-        charset = response.headers.get_content_charset() or "utf-8"
-    try:
-        return body.decode(charset, errors="replace")
-    except LookupError:
-        return body.decode("utf-8", errors="replace")
+def fetch_text(
+    url: str,
+    timeout: int = DEFAULT_TIMEOUT,
+    attempts: int = DEFAULT_FETCH_ATTEMPTS,
+) -> str:
+    last_error: Exception | None = None
+    for attempt in range(attempts):
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                body = response.read()
+                charset = response.headers.get_content_charset() or "utf-8"
+            try:
+                return body.decode(charset, errors="replace")
+            except LookupError:
+                return body.decode("utf-8", errors="replace")
+        except (OSError, TimeoutError, urllib.error.URLError) as exc:
+            last_error = exc
+            if attempt + 1 >= attempts:
+                break
+            time.sleep(0.8 * (attempt + 1))
+    assert last_error is not None
+    raise last_error
 
 
 def clean_text(fragment: str) -> str:
