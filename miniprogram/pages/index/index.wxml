@@ -7,9 +7,6 @@
         <text class="subtitle">{{updatedText}}</text>
       </view>
     </view>
-    <button class="refresh-button" bindtap="refreshData" hover-class="button-hover" aria-label="刷新">
-      <text>刷新</text>
-    </button>
   </view>
 
   <view wx:if="{{loading}}" class="state-block">
@@ -31,18 +28,17 @@
       </view>
     </view>
 
-    <view class="change-panel" aria-label="今日限额变化">
+    <view wx:if="{{limitChanges.length}}" class="change-panel" aria-label="今日限额变化">
       <view class="section-head">
         <text class="section-title">今日限额变化</text>
-        <text class="section-badge">{{limitChanges.length ? limitChanges.length + ' 只' : '无变化'}}</text>
+        <text class="section-badge">{{limitChanges.length}} 只</text>
       </view>
-      <view wx:if="{{limitChanges.length}}" class="change-list">
+      <view class="change-list">
         <view wx:for="{{limitChanges}}" wx:key="code" class="change-item">
           <text class="change-name">{{item.code}} {{item.displayName}}</text>
           <text class="change-detail">{{item.limit_change}}</text>
         </view>
       </view>
-      <text wx:else class="muted">当前批次没有发现日累计限额变化。</text>
     </view>
 
     <view class="toolbar">

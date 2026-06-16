@@ -1,39 +1,33 @@
 .page {
   min-height: 100vh;
-  padding: 24rpx 24rpx 40rpx;
+  padding: 18rpx 18rpx 34rpx;
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 5;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 18rpx;
-  margin: -24rpx -24rpx 0;
-  padding: 24rpx 24rpx 20rpx;
+  gap: 14rpx;
+  padding: 4rpx 0 14rpx;
   border-bottom: 1rpx solid rgba(217, 225, 236, 0.92);
-  background: rgba(246, 248, 251, 0.96);
 }
 
 .brand {
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 18rpx;
+  gap: 14rpx;
 }
 
 .brand-mark {
-  flex: 0 0 76rpx;
-  width: 76rpx;
-  height: 76rpx;
-  border-radius: 20rpx;
+  flex: 0 0 58rpx;
+  width: 58rpx;
+  height: 58rpx;
+  border-radius: 15rpx;
   background: #172033;
   color: #ffffff;
-  font-size: 28rpx;
+  font-size: 23rpx;
   font-weight: 900;
-  line-height: 76rpx;
+  line-height: 58rpx;
   text-align: center;
 }
 
@@ -50,19 +44,18 @@
 
 .title {
   color: #172033;
-  font-size: 36rpx;
+  font-size: 30rpx;
   font-weight: 900;
-  line-height: 1.18;
+  line-height: 1.16;
 }
 
 .subtitle {
-  margin-top: 8rpx;
+  margin-top: 5rpx;
   color: #667085;
-  font-size: 23rpx;
-  line-height: 1.35;
+  font-size: 22rpx;
+  line-height: 1.25;
 }
 
-.refresh-button,
 .retry-button {
   flex: 0 0 auto;
   min-width: 104rpx;
@@ -125,35 +118,37 @@
 .metric-grid {
   display: flex;
   flex-wrap: wrap;
-  margin: 15rpx -9rpx -9rpx;
+  margin: 10rpx -4rpx -4rpx;
 }
 
 .metric-grid + .change-panel {
-  margin-top: 24rpx;
+  margin-top: 14rpx;
 }
 
 .metric-card {
-  width: calc(50% - 18rpx);
-  min-height: 156rpx;
-  margin: 9rpx;
-  padding: 24rpx;
+  width: calc(25% - 8rpx);
+  min-height: 82rpx;
+  margin: 4rpx;
+  padding: 12rpx 8rpx;
   border: 1rpx solid #d9e1ec;
-  border-radius: 18rpx;
+  border-radius: 12rpx;
   background: #ffffff;
 }
 
 .metric-card text {
   display: block;
   color: #667085;
-  font-size: 24rpx;
+  font-size: 19rpx;
   font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
 }
 
 .metric-value {
   display: block;
-  margin-top: 16rpx;
+  margin-top: 8rpx;
   color: #172033;
-  font-size: 52rpx;
+  font-size: 34rpx;
   line-height: 1;
 }
 
@@ -180,13 +175,13 @@
 .change-panel,
 .toolbar,
 .fund-card {
-  margin-top: 20rpx;
+  margin-top: 12rpx;
 }
 
 .change-panel {
-  padding: 24rpx;
+  padding: 16rpx;
   border: 1rpx solid #d9e1ec;
-  border-radius: 18rpx;
+  border-radius: 14rpx;
   background: #ffffff;
 }
 
@@ -194,20 +189,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16rpx;
-  margin-bottom: 18rpx;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
 }
 
 .section-title {
   color: #172033;
-  font-size: 31rpx;
+  font-size: 27rpx;
   font-weight: 900;
 }
 
 .section-badge {
   flex: 0 0 auto;
   color: #667085;
-  font-size: 24rpx;
+  font-size: 22rpx;
   font-weight: 800;
 }
 
@@ -221,13 +216,13 @@
 .change-list {
   display: flex;
   flex-direction: column;
-  gap: 14rpx;
+  gap: 10rpx;
 }
 
 .change-item {
-  padding: 18rpx;
+  padding: 12rpx;
   border: 1rpx solid #fde68a;
-  border-radius: 14rpx;
+  border-radius: 12rpx;
   background: #fffbeb;
 }
 
@@ -238,15 +233,15 @@
 
 .change-name {
   color: #172033;
-  font-size: 27rpx;
+  font-size: 24rpx;
   font-weight: 900;
   line-height: 1.35;
 }
 
 .change-detail {
-  margin-top: 8rpx;
+  margin-top: 6rpx;
   color: #b45309;
-  font-size: 25rpx;
+  font-size: 23rpx;
   font-weight: 800;
   line-height: 1.45;
 }
@@ -254,18 +249,18 @@
 .search-box {
   display: flex;
   align-items: center;
-  min-height: 78rpx;
-  gap: 14rpx;
-  padding: 0 22rpx;
+  min-height: 60rpx;
+  gap: 10rpx;
+  padding: 0 16rpx;
   border: 1rpx solid #d9e1ec;
-  border-radius: 16rpx;
+  border-radius: 12rpx;
   background: #ffffff;
 }
 
 .search-icon {
   flex: 0 0 auto;
   color: #667085;
-  font-size: 36rpx;
+  font-size: 30rpx;
   font-weight: 900;
   line-height: 1;
 }
@@ -274,7 +269,7 @@
   width: 100%;
   min-width: 0;
   color: #172033;
-  font-size: 28rpx;
+  font-size: 25rpx;
 }
 
 .placeholder {
@@ -284,29 +279,29 @@
 .chip-scroll,
 .group-scroll {
   width: 100%;
-  margin-top: 16rpx;
+  margin-top: 10rpx;
   white-space: nowrap;
 }
 
 .chip-row {
   display: inline-flex;
-  gap: 12rpx;
+  gap: 8rpx;
   min-width: 100%;
-  padding-bottom: 4rpx;
+  padding-bottom: 2rpx;
 }
 
 .chip,
 .group-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8rpx;
-  min-height: 62rpx;
-  padding: 0 20rpx;
+  gap: 6rpx;
+  min-height: 48rpx;
+  padding: 0 16rpx;
   border: 1rpx solid #d9e1ec;
   border-radius: 999rpx;
   background: #ffffff;
   color: #172033;
-  font-size: 25rpx;
+  font-size: 22rpx;
   font-weight: 800;
 }
 
@@ -322,13 +317,13 @@
 }
 
 .fund-list {
-  margin-top: 18rpx;
+  margin-top: 10rpx;
 }
 
 .fund-card {
-  padding: 24rpx;
+  padding: 14rpx 16rpx;
   border: 1rpx solid #d9e1ec;
-  border-radius: 18rpx;
+  border-radius: 12rpx;
   background: #ffffff;
 }
 
@@ -343,43 +338,51 @@
 
 .fund-main {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 18rpx;
+  gap: 12rpx;
 }
 
 .fund-title {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .code {
   display: inline-block;
-  min-width: 112rpx;
-  padding: 5rpx 10rpx;
-  border-radius: 10rpx;
+  flex: 0 0 auto;
+  min-width: 88rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 8rpx;
   background: #eef2f7;
   color: #344054;
-  font-size: 23rpx;
+  font-size: 20rpx;
   font-weight: 900;
   text-align: center;
 }
 
 .name {
   display: block;
-  margin-top: 12rpx;
+  min-width: 0;
+  margin-top: 0;
   color: #172033;
-  font-size: 31rpx;
+  font-size: 26rpx;
   font-weight: 900;
-  line-height: 1.35;
-  overflow-wrap: anywhere;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .status-pill {
   flex: 0 0 auto;
-  min-width: 82rpx;
-  padding: 9rpx 14rpx;
+  min-width: 70rpx;
+  padding: 7rpx 11rpx;
   border-radius: 999rpx;
-  font-size: 23rpx;
+  font-size: 20rpx;
   font-weight: 900;
   line-height: 1.1;
   text-align: center;
@@ -408,16 +411,16 @@
 
 .fund-data {
   display: flex;
-  gap: 12rpx;
-  margin-top: 22rpx;
+  gap: 8rpx;
+  margin-top: 10rpx;
 }
 
 .data-cell {
   flex: 1 1 0;
   min-width: 0;
-  min-height: 112rpx;
-  padding: 16rpx 14rpx;
-  border-radius: 14rpx;
+  min-height: 64rpx;
+  padding: 8rpx 9rpx;
+  border-radius: 10rpx;
   background: #f8fafc;
 }
 
@@ -429,24 +432,25 @@
 
 .data-cell text {
   color: #667085;
-  font-size: 22rpx;
+  font-size: 19rpx;
   font-weight: 800;
+  line-height: 1.15;
 }
 
 .data-value {
-  margin-top: 10rpx;
+  margin-top: 5rpx;
   color: #172033;
-  font-size: 26rpx;
+  font-size: 23rpx;
   font-weight: 900;
-  line-height: 1.25;
+  line-height: 1.15;
 }
 
 .change-note,
 .error-note {
-  margin-top: 16rpx;
-  padding: 16rpx;
-  border-radius: 14rpx;
-  font-size: 24rpx;
+  margin-top: 10rpx;
+  padding: 10rpx;
+  border-radius: 10rpx;
+  font-size: 21rpx;
   font-weight: 800;
   line-height: 1.5;
 }
@@ -470,16 +474,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18rpx;
-  margin-top: 18rpx;
-  padding-top: 18rpx;
+  gap: 12rpx;
+  margin-top: 10rpx;
+  padding-top: 10rpx;
   border-top: 1rpx solid #edf2f7;
 }
 
 .group-name {
   min-width: 0;
   color: #667085;
-  font-size: 23rpx;
+  font-size: 20rpx;
   font-weight: 800;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -489,7 +493,7 @@
 .card-actions button {
   flex: 0 0 auto;
   color: #2563eb;
-  font-size: 25rpx;
+  font-size: 21rpx;
   font-weight: 900;
 }
 
@@ -498,6 +502,6 @@
 }
 
 .disclaimer {
-  margin-top: 28rpx;
+  margin-top: 18rpx;
   padding: 0 4rpx;
 }
