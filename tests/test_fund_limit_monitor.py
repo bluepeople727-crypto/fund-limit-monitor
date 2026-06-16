@@ -83,6 +83,23 @@ class ParserTest(unittest.TestCase):
         self.assertEqual(describe_limit_change(previous, result), "100元 -> 10元")
         self.assertEqual(describe_limit_change(None, result), "")
 
+    def test_fetch_error_does_not_create_limit_change(self):
+        result = FundResult(
+            code="016452",
+            group_name="纳斯达克100A",
+            group_type="nasdaq100_a",
+            error="timeout",
+        )
+        previous = {
+            "purchase_status": "限大额",
+            "daily_limit": "200.00元",
+            "banner_limit": "200元",
+            "holding_limit": "无限额",
+            "error": "",
+        }
+        self.assertEqual(describe_limit_change(previous, result), "")
+        self.assertEqual(describe_changes(previous, result), ["错误状态: 空 -> timeout"])
+
     def test_discover_nasdaq100_a_rmb(self):
         group = {
             "discover": {

@@ -286,6 +286,8 @@ def save_state(path: Path, results: list[FundResult], now: str) -> None:
 
 def describe_changes(previous: dict[str, Any] | None, result: FundResult) -> list[str]:
     if previous is None:
+        if result.error:
+            return [f"错误状态: 空 -> {result.error}"]
         return ["首次记录"]
 
     labels = {
@@ -295,6 +297,8 @@ def describe_changes(previous: dict[str, Any] | None, result: FundResult) -> lis
         "holding_limit": "持仓上限",
         "error": "错误状态",
     }
+    if result.error:
+        labels = {"error": "错误状态"}
     changes: list[str] = []
     current = result.state_payload()
     for field_name, label in labels.items():
@@ -306,7 +310,7 @@ def describe_changes(previous: dict[str, Any] | None, result: FundResult) -> lis
 
 
 def describe_limit_change(previous: dict[str, Any] | None, result: FundResult) -> str:
-    if previous is None:
+    if previous is None or result.error:
         return ""
     old_limit = previous.get("daily_limit") or previous.get("banner_limit") or ""
     new_limit = result.daily_limit or result.banner_limit or ""
