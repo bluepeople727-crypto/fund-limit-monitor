@@ -54,6 +54,11 @@ function display(value, fallback = "未取到") {
   return text || fallback;
 }
 
+function displayDateOnly(value) {
+  const text = String(value ?? "").trim();
+  return text.split(/\s+/)[0] || "--";
+}
+
 function setMetric(element, value) {
   element.textContent = Number.isFinite(value) ? String(value) : "--";
 }
@@ -64,7 +69,7 @@ function renderMetrics() {
   setMetric(elements.metricLimitChanged, summary.limit_changed);
   setMetric(elements.metricLimited, summary.limited);
   setMetric(elements.metricErrors, summary.errors);
-  elements.updatedAt.textContent = `${state.data.updated_at_display} 更新｜${state.data.source_name}`;
+  elements.updatedAt.textContent = `${displayDateOnly(state.data.updated_at_display)} 更新｜${state.data.source_name}`;
   elements.disclaimer.textContent = state.data.disclaimer;
 }
 

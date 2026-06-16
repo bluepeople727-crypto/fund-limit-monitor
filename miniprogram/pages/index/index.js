@@ -25,6 +25,11 @@ function normalize(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+function displayDateOnly(value) {
+  const text = String(value || "").trim();
+  return text.split(/\s+/)[0] || "--";
+}
+
 function prepareFund(fund) {
   const statusClass = fund.status_kind || "unknown";
   const changed = Array.isArray(fund.changed) ? fund.changed : [];
@@ -150,7 +155,7 @@ Page({
       {
         loading: false,
         error: "",
-        updatedText: `${payload.updated_at_display || "--"} 更新｜${payload.source_name || "数据源"}`,
+        updatedText: `${displayDateOnly(payload.updated_at_display)} 更新｜${payload.source_name || "数据源"}`,
         disclaimer: payload.disclaimer || "",
         metrics: [
           { label: "监控基金", value: summary.total || funds.length || 0, tone: "teal" },
