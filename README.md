@@ -99,12 +99,29 @@ SERVERCHAN_SENDKEY = 你的 Server酱 SendKey
 
 云端运行不依赖你的电脑是否联网，更适合固定时间推送。
 
+## 公开看板
+
+仓库里的 `public/` 是一个手机友好的公开看板，会读取：
+
+```text
+public/data/latest.json
+```
+
+GitHub Actions 每天运行监控后，会同步更新这份 JSON，并把 `public/` 发布到 GitHub Pages。页面包含今日限额变化、分组筛选、状态筛选、基金搜索和天天基金来源链接。
+
+本地生成看板数据：
+
+```bash
+python3 fund_limit_monitor.py --config config.example.json --no-push --site-output public/data/latest.json
+```
+
 ## 常用参数
 
 ```bash
 python3 fund_limit_monitor.py --no-push
 python3 fund_limit_monitor.py --only-changed
 python3 fund_limit_monitor.py --print-json
+python3 fund_limit_monitor.py --site-output public/data/latest.json
 python3 fund_limit_monitor.py --config config.json --state .fund_limit_state.json
 ```
 

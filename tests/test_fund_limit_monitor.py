@@ -6,6 +6,7 @@ from fund_limit_monitor import (
     FundResult,
     compact_fund_name,
     compact_limit,
+    build_site_payload,
     describe_changes,
     describe_limit_change,
     discover_funds,
@@ -128,6 +129,31 @@ class ParserTest(unittest.TestCase):
         self.assertIn("限额变化：100元 -> 10元", text)
         self.assertNotIn("<font", text)
         self.assertNotIn("| 代码 |", text)
+
+    def test_build_site_payload_groups_and_changes(self):
+        result = FundResult(
+            code="040046",
+            group_name="纳斯达克100A",
+            group_type="nasdaq100_a",
+            name="华安纳斯达克100ETF联接(QDII)A",
+            purchase_status="限大额",
+            daily_limit="10.00元",
+            holding_limit="无限额",
+            limit_change="100元 -> 10元",
+            changed=["日累计限额: 100.00元 -> 10.00元"],
+            source_url="https://fundf10.eastmoney.com/jjfl_040046.html",
+        )
+        payload = build_site_payload(
+            [result],
+            {"source_name": "测试源", "fund_groups": [{"name": "纳斯达克100A"}]},
+            datetime(2026, 6, 16, 9, 30, tzinfo=ZoneInfo("Asia/Shanghai")),
+        )
+        self.assertEqual(payload["summary"]["total"], 1)
+        self.assertEqual(payload["summary"]["limit_changed"], 1)
+        self.assertEqual(payload["groups"][0]["name"], "纳斯达克100A")
+        self.assertEqual(payload["funds"][0]["status_kind"], "limited")
+        self.assertEqual(payload["funds"][0]["display_limit"], "10元")
+        self.assertEqual(payload["changes"][0]["code"], "040046")
 
 
 if __name__ == "__main__":

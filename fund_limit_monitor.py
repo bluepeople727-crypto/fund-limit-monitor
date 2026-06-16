@@ -516,6 +516,121 @@ def render_summary(
     return "\n".join(lines)
 
 
+def result_status_kind(result: FundResult) -> str:
+    if result.error:
+        return "error"
+    status = result.purchase_status or ""
+    if "暂停" in status:
+        return "paused"
+    if "限" in status:
+        return "limited"
+    if "开放" in status:
+        return "open"
+    return "unknown"
+
+
+def build_site_payload(
+    results: list[FundResult],
+    config: dict[str, Any],
+    now: datetime,
+) -> dict[str, Any]:
+    by_group: dict[str, list[FundResult]] = {}
+    for result in results:
+        by_group.setdefault(result.group_name, []).append(result)
+
+    ordered_groups = group_order(config)
+    ordered_groups += [name for name in by_group if name not in ordered_groups]
+
+    group_payloads: list[dict[str, Any]] = []
+    for group_name in ordered_groups:
+        group_results = sorted(by_group.get(group_name, []), key=lambda item: item.code)
+        if not group_results:
+            continue
+        first = group_results[0]
+        group_payloads.append(
+            {
+                "name": group_name,
+                "type": first.group_type,
+                "count": len(group_results),
+                "changed_count": sum(1 for item in group_results if item.changed),
+                "limit_changed_count": sum(1 for item in group_results if item.limit_change),
+                "error_count": sum(1 for item in group_results if item.error),
+            }
+        )
+
+    fund_payloads = []
+    for result in sorted(results, key=lambda item: (item.group_name, item.code)):
+        display_name = result.name or result.configured_name or "未取到名称"
+        raw_limit = result.daily_limit or result.banner_limit
+        fund_payloads.append(
+            {
+                "code": result.code,
+                "group_name": result.group_name,
+                "group_type": result.group_type,
+                "name": display_name,
+                "short_name": compact_fund_name(display_name),
+                "configured_name": result.configured_name,
+                "purchase_status": result.purchase_status or "未知状态",
+                "redeem_status": result.redeem_status,
+                "invest_status": result.invest_status,
+                "status_kind": result_status_kind(result),
+                "daily_limit": result.daily_limit,
+                "banner_limit": result.banner_limit,
+                "display_limit": compact_limit(raw_limit),
+                "daily_limit_yuan": result.daily_limit_yuan,
+                "purchase_start": result.purchase_start,
+                "first_purchase": result.first_purchase,
+                "additional_purchase": result.additional_purchase,
+                "holding_limit": result.holding_limit,
+                "display_holding_limit": compact_limit(result.holding_limit),
+                "source_url": result.source_url,
+                "fetched_at": result.fetched_at,
+                "changed": result.changed,
+                "limit_change": result.limit_change,
+                "error": result.error,
+            }
+        )
+
+    changed_funds = [
+        item for item in fund_payloads if item["limit_change"] or item["changed"] or item["error"]
+    ]
+    return {
+        "version": 1,
+        "title": "纳斯达克基金限额看板",
+        "source_name": config.get("source_name", "天天基金 F10 购买信息"),
+        "updated_at": now.isoformat(timespec="seconds"),
+        "updated_at_display": now.strftime("%Y-%m-%d %H:%M"),
+        "timezone": str(config.get("timezone", "Asia/Shanghai")),
+        "summary": {
+            "total": len(results),
+            "groups": len(group_payloads),
+            "changed": len(changed_funds),
+            "limit_changed": sum(1 for item in fund_payloads if item["limit_change"]),
+            "errors": sum(1 for item in fund_payloads if item["error"]),
+            "limited": sum(1 for item in fund_payloads if item["status_kind"] == "limited"),
+            "paused": sum(1 for item in fund_payloads if item["status_kind"] == "paused"),
+            "open": sum(1 for item in fund_payloads if item["status_kind"] == "open"),
+        },
+        "groups": group_payloads,
+        "changes": changed_funds,
+        "funds": fund_payloads,
+        "disclaimer": "数据来自天天基金公开页面，交易前请以实际下单平台为准。本页面不构成投资建议。",
+    }
+
+
+def write_site_payload(
+    path: Path,
+    results: list[FundResult],
+    config: dict[str, Any],
+    now: datetime,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    payload = build_site_payload(results, config, now)
+    with path.open("w", encoding="utf-8") as file:
+        json.dump(payload, file, ensure_ascii=False, indent=2)
+        file.write("\n")
+
+
 def placeholder_secret(value: str) -> bool:
     stripped = value.strip()
     return not stripped or stripped.startswith("${") or stripped.endswith("_HERE")
@@ -660,6 +775,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dry-run", action="store_true", help="同 --no-push。")
     parser.add_argument("--only-changed", action="store_true", help="输出内容只包含变化项。")
     parser.add_argument("--print-json", action="store_true", help="以 JSON 输出本次抓取结果。")
+    parser.add_argument("--site-output", help="把本次抓取结果导出为公开网页使用的 JSON。")
     parser.add_argument("--test-push", action="store_true", help="发送一条微信推送测试消息。")
     return parser.parse_args()
 
@@ -685,6 +801,9 @@ def main() -> int:
         state_path = Path(args.state)
         state = load_state(state_path)
         results = monitor_once(config, state, now)
+
+        if args.site_output:
+            write_site_payload(Path(args.site_output), results, config, now)
 
         if args.print_json:
             print(json.dumps([asdict(result) for result in results], ensure_ascii=False, indent=2))
