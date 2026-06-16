@@ -1,0 +1,29 @@
+name: Daily Fund Limit Monitor
+
+on:
+  schedule:
+    # 08:30 Asia/Shanghai = 00:30 UTC
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore monitor state
+        uses: actions/cache@v4
+        with:
+          path: .fund_limit_state.json
+          key: fund-limit-state-${{ github.run_id }}
+          restore-keys: |
+            fund-limit-state-
+
+      - name: Run monitor
+        env:
+          FUND_NOTIFY_ENABLED: "true"
+          FUND_NOTIFY_CHANNEL: "serverchan"
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+        run: python3 fund_limit_monitor.py --config config.example.json

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.pkq.fund-limit-monitor</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/env</string>
+    <string>python3</string>
+    <string>/Users/pkq/Documents/纳斯达克每日限额/fund_limit_monitor.py</string>
+    <string>--config</string>
+    <string>/Users/pkq/Documents/纳斯达克每日限额/config.json</string>
+    <string>--state</string>
+    <string>/Users/pkq/Documents/纳斯达克每日限额/.fund_limit_state.json</string>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/pkq/Documents/纳斯达克每日限额</string>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/pkq/Documents/纳斯达克每日限额/logs/fund-limit-monitor.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/pkq/Documents/纳斯达克每日限额/logs/fund-limit-monitor.err.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

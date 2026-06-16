@@ -1,0 +1,6 @@
+config.json
+.fund_limit_state.json
+logs/*.log
+logs/*.err.log
+__pycache__/
+.pytest_cache/
