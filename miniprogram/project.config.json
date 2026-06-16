@@ -1,0 +1,22 @@
+{
+  "appid": "touristappid",
+  "compileType": "miniprogram",
+  "libVersion": "3.7.0",
+  "miniprogramRoot": "./",
+  "projectname": "fund-limit-monitor",
+  "description": "纳斯达克基金限额监控小程序",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "enhance": true,
+    "showShadowRootInWxmlPanel": true,
+    "packNpmManually": false,
+    "uglifyFileName": false
+  },
+  "packOptions": {
+    "ignore": []
+  },
+  "condition": {}
+}

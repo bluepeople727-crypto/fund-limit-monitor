@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "纳斯达克限额",
+    "navigationBarBackgroundColor": "#f6f8fb",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f6f8fb",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "networkTimeout": {
+    "request": 12000
+  },
+  "sitemapLocation": "sitemap.json"
+}

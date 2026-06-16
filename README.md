@@ -115,6 +115,23 @@ GitHub Actions 每天运行监控后，会同步更新这份 JSON，并把 `publ
 python3 fund_limit_monitor.py --config config.example.json --no-push --site-output public/data/latest.json
 ```
 
+## 微信小程序
+
+仓库里的 `miniprogram/` 是微信小程序项目，首页会读取公开看板同一份数据：
+
+```text
+https://bluepeople727-crypto.github.io/fund-limit-monitor/data/latest.json
+```
+
+导入方式：
+
+1. 打开微信开发者工具。
+2. 选择“导入项目”，目录选择仓库里的 `miniprogram/`。
+3. 开发调试可以先使用 `touristappid`，或把 `miniprogram/project.config.json` 里的 `appid` 改成你的小程序 AppID。
+4. 打开后首页会显示统计摘要、今日限额变化、状态筛选、分组筛选、搜索和基金卡片。
+
+开发者工具里 `project.config.json` 暂时设置了 `urlCheck: false`，方便本地预览 GitHub Pages 数据。正式发布给所有人访问时，需要在微信公众平台后台配置 request 合法域名。GitHub Pages 域名不一定适合正式审核和长期生产使用，后续更稳的方案是把 `latest.json` 同步到自己的备案域名，或接入微信云开发/云函数再返回这份 JSON。
+
 ## 常用参数
 
 ```bash

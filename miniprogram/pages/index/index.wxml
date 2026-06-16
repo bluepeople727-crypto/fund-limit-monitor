@@ -1,0 +1,146 @@
+<view class="page">
+  <view class="topbar">
+    <view class="brand">
+      <view class="brand-mark">NQ</view>
+      <view class="brand-copy">
+        <text class="title">纳斯达克基金限额</text>
+        <text class="subtitle">{{updatedText}}</text>
+      </view>
+    </view>
+    <button class="refresh-button" bindtap="refreshData" hover-class="button-hover" aria-label="刷新">
+      <text>刷新</text>
+    </button>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-block">
+    <view class="loader"></view>
+    <text>正在加载最新限额</text>
+  </view>
+
+  <view wx:elif="{{error}}" class="state-block error-state">
+    <text class="state-title">数据加载失败</text>
+    <text class="state-copy">{{error}}</text>
+    <button class="retry-button" bindtap="refreshData" hover-class="button-hover">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <view class="metric-grid" aria-label="统计摘要">
+      <view wx:for="{{metrics}}" wx:key="label" class="metric-card {{item.tone}}">
+        <text>{{item.label}}</text>
+        <text class="metric-value">{{item.value}}</text>
+      </view>
+    </view>
+
+    <view class="change-panel" aria-label="今日限额变化">
+      <view class="section-head">
+        <text class="section-title">今日限额变化</text>
+        <text class="section-badge">{{limitChanges.length ? limitChanges.length + ' 只' : '无变化'}}</text>
+      </view>
+      <view wx:if="{{limitChanges.length}}" class="change-list">
+        <view wx:for="{{limitChanges}}" wx:key="code" class="change-item">
+          <text class="change-name">{{item.code}} {{item.displayName}}</text>
+          <text class="change-detail">{{item.limit_change}}</text>
+        </view>
+      </view>
+      <text wx:else class="muted">当前批次没有发现日累计限额变化。</text>
+    </view>
+
+    <view class="toolbar">
+      <view class="search-box">
+        <text class="search-icon">⌕</text>
+        <input
+          value="{{query}}"
+          bindinput="onSearchInput"
+          confirm-type="search"
+          placeholder="搜索代码或名称"
+          placeholder-class="placeholder"
+        />
+      </view>
+    </view>
+
+    <scroll-view class="chip-scroll" scroll-x enable-flex aria-label="状态筛选">
+      <view class="chip-row">
+        <button
+          wx:for="{{statusTabs}}"
+          wx:key="key"
+          class="chip {{item.active ? 'active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="changeStatus"
+          hover-class="chip-hover"
+        >
+          <text>{{item.label}}</text>
+          <text class="chip-count">{{item.count}}</text>
+        </button>
+      </view>
+    </scroll-view>
+
+    <scroll-view class="group-scroll" scroll-x enable-flex aria-label="基金分组">
+      <view class="chip-row">
+        <button
+          wx:for="{{groupTabs}}"
+          wx:key="key"
+          class="group-chip {{item.active ? 'active' : ''}}"
+          data-key="{{item.key}}"
+          bindtap="changeGroup"
+          hover-class="chip-hover"
+        >
+          <text>{{item.label}}</text>
+          <text class="chip-count">{{item.count}}</text>
+        </button>
+      </view>
+    </scroll-view>
+
+    <view wx:if="{{filteredFunds.length}}" class="fund-list">
+      <view
+        wx:for="{{filteredFunds}}"
+        wx:key="code"
+        class="fund-card {{item.statusClass}} {{item.hasChange ? 'changed' : ''}} {{item.hasError ? 'error-card' : ''}}"
+      >
+        <view class="fund-main">
+          <view class="fund-title">
+            <text class="code">{{item.code}}</text>
+            <text class="name">{{item.displayName}}</text>
+          </view>
+          <text class="status-pill {{item.statusClass}}">{{item.statusText}}</text>
+        </view>
+
+        <view class="fund-data">
+          <view class="data-cell">
+            <text>日限额</text>
+            <text class="data-value">{{item.displayLimit}}</text>
+          </view>
+          <view class="data-cell">
+            <text>申购状态</text>
+            <text class="data-value">{{item.purchaseStatus}}</text>
+          </view>
+          <view class="data-cell">
+            <text>持仓上限</text>
+            <text class="data-value">{{item.holdingLimit}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{item.limit_change}}" class="change-note limit-note">
+          <text>限额变化：{{item.limit_change}}</text>
+        </view>
+        <view wx:if="{{item.otherChangeText}}" class="change-note">
+          <text>其他变化：{{item.otherChangeText}}</text>
+        </view>
+        <view wx:if="{{item.error}}" class="error-note">
+          <text>{{item.error}}</text>
+        </view>
+
+        <view class="card-actions">
+          <text class="group-name">{{item.group_name}}</text>
+          <button data-url="{{item.source_url}}" bindtap="copySource" hover-class="text-button-hover">复制来源</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="state-block empty-state">
+      <text class="state-title">没有匹配基金</text>
+      <text class="state-copy">换一个关键词或筛选条件试试。</text>
+    </view>
+
+    <text class="disclaimer">{{disclaimer}}</text>
+  </block>
+</view>
