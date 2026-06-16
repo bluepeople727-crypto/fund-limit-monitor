@@ -78,31 +78,67 @@ Page({
     if (!isPullDown) {
       this.setData({ loading: true, error: "" });
     }
-    wx.request({
-      url: `${app.globalData.dataUrl}?t=${Date.now()}`,
-      method: "GET",
-      timeout: 12000,
-      success: (response) => {
-        if (response.statusCode < 200 || response.statusCode >= 300 || !response.data) {
-          this.setData({
-            loading: false,
-            error: `HTTP ${response.statusCode || "异常"}`
-          });
-          return;
-        }
-        this.applyPayload(response.data);
-      },
-      fail: (error) => {
+    this.loadPayload()
+      .then((payload) => {
+        this.applyPayload(payload);
+      })
+      .catch((error) => {
         this.setData({
           loading: false,
-          error: error.errMsg || "网络请求失败"
+          error: error.message || "网络请求失败"
         });
-      },
-      complete: () => {
+      })
+      .finally(() => {
         if (isPullDown) {
           wx.stopPullDownRefresh();
         }
-      }
+      });
+  },
+
+  loadPayload() {
+    if (app.globalData.useCloudData && wx.cloud && wx.cloud.callFunction) {
+      return this.requestPayloadFromCloud().catch(() => this.requestPayloadDirectly());
+    }
+    return this.requestPayloadDirectly();
+  },
+
+  requestPayloadFromCloud() {
+    return new Promise((resolve, reject) => {
+      wx.cloud.callFunction({
+        name: app.globalData.cloudFunctionName,
+        success: (response) => {
+          const result = response.result || {};
+          const payload = result.data || result;
+          if (payload && Array.isArray(payload.funds)) {
+            resolve(payload);
+            return;
+          }
+          reject(new Error(result.error || "云函数返回数据异常"));
+        },
+        fail: (error) => {
+          reject(new Error(error.errMsg || "云函数调用失败"));
+        }
+      });
+    });
+  },
+
+  requestPayloadDirectly() {
+    return new Promise((resolve, reject) => {
+      wx.request({
+        url: `${app.globalData.dataUrl}?t=${Date.now()}`,
+        method: "GET",
+        timeout: 12000,
+        success: (response) => {
+          if (response.statusCode < 200 || response.statusCode >= 300 || !response.data) {
+            reject(new Error(`HTTP ${response.statusCode || "异常"}`));
+            return;
+          }
+          resolve(response.data);
+        },
+        fail: (error) => {
+          reject(new Error(error.errMsg || "网络请求失败"));
+        }
+      });
     });
   },
 

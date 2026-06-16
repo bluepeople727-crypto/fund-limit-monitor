@@ -1,0 +1,9 @@
+{
+  "name": "getLatestFundData",
+  "version": "1.0.0",
+  "description": "Fetch latest fund limit dashboard data",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}
