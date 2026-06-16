@@ -4,3 +4,4 @@ logs/*.log
 logs/*.err.log
 __pycache__/
 .pytest_cache/
+miniprogram/project.private.config.json

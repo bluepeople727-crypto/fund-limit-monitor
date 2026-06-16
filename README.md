@@ -117,10 +117,10 @@ python3 fund_limit_monitor.py --config config.example.json --no-push --site-outp
 
 ## 微信小程序
 
-仓库里的 `miniprogram/` 是微信小程序项目，首页会读取公开看板同一份数据，并优先通过微信云函数转发：
+仓库里的 `miniprogram/` 是微信小程序项目，首页会读取公开看板同一份数据。当前默认直连数据源：
 
 ```text
-miniprogram/cloudfunctions/getLatestFundData
+https://bluepeople727-crypto.github.io/fund-limit-monitor/data/latest.json
 ```
 
 导入方式：
@@ -130,7 +130,7 @@ miniprogram/cloudfunctions/getLatestFundData
 3. 开发调试可以先使用 `touristappid`，或把 `miniprogram/project.config.json` 里的 `appid` 改成你的小程序 AppID。
 4. 打开后首页会显示统计摘要、今日限额变化、状态筛选、分组筛选、搜索和基金卡片。
 
-开发者工具里 `project.config.json` 暂时设置了 `urlCheck: false`，方便本地预览。正式发布建议开通云开发，把 `miniprogram/app.js` 里的 `cloudEnv` 填成云环境 ID，并上传部署 `getLatestFundData` 云函数。更详细步骤见 `miniprogram/README.md`。
+开发者工具里 `project.config.json` 暂时设置了 `urlCheck: false`，方便本地预览。如果当前测试号不能选择云开发，导入时选择“不使用云服务”即可。正式发布时需要在微信公众平台配置 request 合法域名；后续也可以把 `miniprogram/app.js` 里的 `useCloudData` 改成 `true`，再启用 `getLatestFundData` 云函数。
 
 ## 常用参数
 

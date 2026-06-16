@@ -9,7 +9,7 @@ App({
   },
 
   globalData: {
-    useCloudData: true,
+    useCloudData: false,
     cloudEnv: "",
     cloudFunctionName: "getLatestFundData",
     dataUrl: "https://bluepeople727-crypto.github.io/fund-limit-monitor/data/latest.json"
